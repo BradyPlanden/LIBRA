@@ -135,7 +135,8 @@ function Simulate(Cell, Input, Def, Tk, SList, SOC, A₀, B₀, C₀, D₀, t)
         Results.θₚ[i + 1] = cs_pos_avg / Cell.Pos.cs_max
         Results.Cell_SOC[i + 1] = (Results.θₙ[i + 1] - Cell.Neg.θ_0) /
                                   (Cell.Neg.θ_100 - Cell.Neg.θ_0)
-        Results.Cell_SOC[Results.Cell_SOC > 1.0] .= 1.0  # Ensure SOC is within bounds   
+        Results.Cell_SOC[Results.Cell_SOC .> 1.0] .= 1.0  # Ensure SOC is within bounds   
+        Results.Cell_SOC[Results.Cell_SOC .< 0.0] .= 0.0  # Ensure SOC is within bounds
 
         javg_neg = Results.Iapp[i + 1] / (Cell.Neg.as * F * Cell.Neg.L * Cell.Const.CC_A)
         javg_pos = Results.Iapp[i + 1] / (Cell.Pos.as * F * Cell.Pos.L * Cell.Const.CC_A)
