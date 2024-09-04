@@ -221,9 +221,12 @@ function Simulate(Cell, Input, Def, Tk, SList, SOC, A₀, B₀, C₀, D₀, t)
         Results.jL[i + 1] = Results.y[i + 1, FluxPosInd[1]]
 
         # Neg
+        println("Time is: ", i)
+        println("Results.Cseₙ: ", Results.Cseₙ[i+1,:])
+        println("Results.Ce: ", Results.Ce[i+1,1])
+        println("Cell.Neg.cs_max - Results.Cseₙ: ", (Cell.Neg.cs_max .- Results.Cseₙ[i + 1, :]))
         j₀ⁿ = findmax([ones(size(Results.Cseₙ, 2)) * eps() (kₙ .*
-                                                            (Results.Cseₙ[i + 1,
-                :] .^
+                                                            (Results.Cseₙ[i + 1,:] .^
                                                              Cell.Neg.α) .*
                                                             (Results.Ce[i + 1, 1] .^
                                                              (1 - Cell.Neg.α))) .*
