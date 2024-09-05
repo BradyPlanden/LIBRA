@@ -221,10 +221,16 @@ function Simulate(Cell, Input, Def, Tk, SList, SOC, A₀, B₀, C₀, D₀, t)
         Results.jL[i + 1] = Results.y[i + 1, FluxPosInd[1]]
 
         # Neg
-        println("Time is: ", i)
-        println("Results.Cseₙ: ", Results.Cseₙ[i+1,:])
-        println("Results.Ce: ", Results.Ce[i+1,1])
-        println("Cell.Neg.cs_max - Results.Cseₙ: ", (Cell.Neg.cs_max .- Results.Cseₙ[i + 1, :]))
+        # check if any of the concentrations is negative
+        if any(Results.Cseₙ[i + 1, :] .< 0.0) || Results.Ce[i + 1, 1] .< 0.0 || any((Cell.Neg.cs_max .- Results.Cseₙ[i + 1, :]) .< 0.0)
+            println("Negative Concentration in Negative Electrode")
+            println("Time is: ", i)
+            println("Results.Cseₙ: ", Results.Cseₙ[i+1,:])
+            println("Results.Ce: ", Results.Ce[i+1,1])
+            println("Cell.Neg.cs_max - Results.Cseₙ: ", (Cell.Neg.cs_max .- Results.Cseₙ[i + 1, :]))
+            break
+        end
+        
         j₀ⁿ = findmax([ones(size(Results.Cseₙ, 2)) * eps() (kₙ .*
                                                             (Results.Cseₙ[i + 1,:] .^
                                                              Cell.Neg.α) .*
