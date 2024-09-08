@@ -191,7 +191,11 @@ function Simulate(Cell, Input, Def, Tk, SList, SOC, A₀, B₀, C₀, D₀, t)
         #                          (SOCₙ .* Cell.Neg.cs_max .+
         #                           Results.y[i + 1, CseNegInd])
         Results.Cseₙ[i + 1, :] = (SOCₙ .* Cell.Neg.cs_max .+ Results.y[i + 1, CseNegInd])
+<<<<<<< HEAD
         isany(Results.Cseₙ[i + 1, :] .> Cell.Neg.cs_max) ? Results.Cseₙ[Results.Cseₙ[i + 1, :] .> Cell.Neg.cs_max] .= Cell.Neg.cs_max : nothing
+=======
+        Results.Cseₙ[i + 1, Results.Cseₙ[i + 1, :] .> Cell.Neg.cs_max] .= Cell.Neg.cs_max
+>>>>>>> 569c857c1a1d71dbbc3a704a7dc475db145c9ac4
         Results.Cseₚ[i + 1, :] = (SOCₚ .* Cell.Pos.cs_max .+
                                   Results.y[i + 1, CsePosInd]) .>
                                  ones(size(Results.Cseₚ, 2)) * Cell.Pos.cs_max ?
