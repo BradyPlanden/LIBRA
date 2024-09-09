@@ -184,12 +184,18 @@ function Simulate(Cell, Input, Def, Tk, SList, SOC, A₀, B₀, C₀, D₀, t)
         Results.y[i + 1, :] = C * Results.x[i + 1, :] + D * Results.Iapp[i + 1]
 
         # Concentrations & Force electrode concentration maximum
-        Results.Cseₙ[i + 1, :] = (SOCₙ .* Cell.Neg.cs_max .+
-                                  Results.y[i + 1, CseNegInd]) >
-                                 ones(size(Results.Cseₙ, 2)) * Cell.Neg.cs_max ?
-                                 ones(size(Results.Cseₙ, 2)) * Cell.Neg.cs_max :
-                                 (SOCₙ .* Cell.Neg.cs_max .+
-                                  Results.y[i + 1, CseNegInd])
+        # Results.Cseₙ[i + 1, :] = any((SOCₙ .* Cell.Neg.cs_max .+
+        #                           Results.y[i + 1, CseNegInd]) .> Cell.Neg.cs_max) ?
+        #                          ones(size(Results.Cseₙ, 2)) * Cell.Neg.cs_max :
+        #                          (SOCₙ .* Cell.Neg.cs_max .+
+        #                           Results.y[i + 1, CseNegInd])
+        # Define the concentration of the negative electrode
+        Results.Cseₙ[i + 1, :] = SOCₙ .* Cell.Neg.cs_max .+ Results.y[i + 1, CseNegInd]
+        # Check if any of the concentrations is greater than the maximum concentration
+        any(Results.Cseₙ[i + 1, :] .> Cell.Neg.cs_max) ?
+             Results.Cseₙ[i+1, Results.Cseₙ[i + 1, :] .> Cell.Neg.cs_max] .= Cell.Neg.cs_max :
+             nothing
+                                 
         Results.Cseₚ[i + 1, :] = (SOCₚ .* Cell.Pos.cs_max .+
                                   Results.y[i + 1, CsePosInd]) >
                                  ones(size(Results.Cseₚ, 2)) * Cell.Pos.cs_max ?
