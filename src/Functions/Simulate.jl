@@ -198,7 +198,7 @@ function Simulate(Cell, Input, Def, Tk, SList, SOC, A₀, B₀, C₀, D₀, t)
              nothing
 
         Results.Cseₚ[i + 1, :] = (SOCₚ .* Cell.Pos.cs_max .+
-                                  Results.y[i + 1, CsePosInd]) .>
+                                  Results.y[i + 1, CsePosInd]) >
                                  ones(size(Results.Cseₚ, 2)) * Cell.Pos.cs_max ?
                                  ones(size(Results.Cseₚ, 2)) * Cell.Pos.cs_max :
                                  (SOCₚ .* Cell.Pos.cs_max .+
